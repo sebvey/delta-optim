@@ -1,5 +1,6 @@
 # custom
 **/tmp
+sbx*
 
 # Python-generated files
 __pycache__/

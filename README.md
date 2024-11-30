@@ -14,4 +14,5 @@ WITH DUCKDB:
 -> NO USE TO ZORDER... IT'S THE OPPOSITE, SLIGHTY INCREASE QUERIES
 
 WITH POLARS:
-- it crashes ...
+- eager is veeerrrry slow compared to duckdb
+- lazy crashes (it's experimental)

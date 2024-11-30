@@ -1,19 +1,25 @@
 from datetime import date, timedelta
+import timeit
+from typing import Callable
 
+import pyarrow as pa
 from deltalake import DeltaTable, WriterProperties, write_deltalake
 
-from .table import DuplicationMode, duplicate_table, unlinked_table_path,create_table
+from ..domain import DuplicationMode
+from .table import duplicate_table, unlinked_table_path,create_table
 from . import produce
 
 
 def raw_table(
         start_date: date,
         end_date:date,
-        locations: list[str]
+        locations: list[str],
+        produce_method: Callable[[date,str],pa.Table],
     ) -> DeltaTable:
 
     print()
-    print(f"# CONSTRUCTING RAW TABLE ...")
+    print(f"## CONSTRUCTING RAW TABLE")
+    print(f"# - with: {produce_method.__name__}")
 
     _ = unlinked_table_path("raw")
     raw_table = create_table("raw")
@@ -23,14 +29,19 @@ def raw_table(
         for i in range((end_date - start_date).days)
     )
 
-    for day in days:
-        for location in locations:
-            write_deltalake(
-                raw_table,
-                produce.records(day, location).to_arrow(),
-                mode="append",
-                writer_properties=WriterProperties(compression="ZSTD")
-            )
+    def generate():
+        for day in days:
+            for location in locations:
+                write_deltalake(
+                    raw_table,
+                    produce_method(day, location),
+                    mode="append",
+                    writer_properties=WriterProperties(compression="ZSTD")
+                )
+
+    generation_time = timeit.timeit(generate, number=1)
+
+    print(f"# - Generation time: {round(generation_time,2)}")
 
     return raw_table
 
