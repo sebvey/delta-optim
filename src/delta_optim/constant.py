@@ -16,4 +16,5 @@ class TableConf:
 RAW_TABLE_CONF = TableConf("raw")
 
 COMPACT_DELTARS_CONF = TableConf("compact_deltars")
-COMPACT_DELTARS_RW_CONF = TableConf("compact_deltars_rw")
+COMPACT_RW_CONF = TableConf("compact_rw")
+COMPACT_DELTAIO_CONF = TableConf("compact_deltaio")

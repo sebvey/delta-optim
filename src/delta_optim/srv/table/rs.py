@@ -28,11 +28,3 @@ def create(table_conf: TableConf) -> DeltaTable:
         mode="error",
         partition_by=["year_month"],
     )
-
-
-def clone(src_table: DeltaTable, dst_folder: Path) -> DeltaTable:
-    "Clones a table by copying files. Erases existing destination folder if any"
-
-    utils.unlink_path(dst_folder)
-    shutil.copytree(src=src_table.table_uri,dst=dst_folder)
-    return DeltaTable(dst_folder)
