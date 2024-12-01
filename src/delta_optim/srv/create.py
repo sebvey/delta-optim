@@ -6,7 +6,7 @@ import pyarrow as pa
 from deltalake import DeltaTable, WriterProperties, write_deltalake
 
 from ..constant import RAW_TABLE_CONF
-from .table import create
+from . import table
 from . import utils
 
 
@@ -24,7 +24,7 @@ def raw_table(
 
 
     utils.unlink_path(RAW_TABLE_CONF.path)
-    raw_table = create(RAW_TABLE_CONF)
+    raw_table = table.rs.create(RAW_TABLE_CONF)
 
     days = (
         start_date + timedelta(days=i)

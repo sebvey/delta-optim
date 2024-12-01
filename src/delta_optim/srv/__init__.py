@@ -1,10 +1,11 @@
+from . import query
 from . import (
     create,
     compact,
-    query,
     records_producer,
     table,
-    utils
+    utils,
+    spark_session,
 )
 
 __all__ = [
@@ -13,5 +14,6 @@ __all__ = [
     records_producer,
     query,
     table,
-    utils
+    utils,
+    spark_session,
 ]
