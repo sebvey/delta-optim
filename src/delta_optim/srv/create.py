@@ -5,9 +5,9 @@ from typing import Callable
 import pyarrow as pa
 from deltalake import DeltaTable, WriterProperties, write_deltalake
 
-from ..domain import DuplicationMode
-from .table import duplicate_table, unlinked_table_path,create_table
-from . import produce
+from ..constant import RAW_TABLE_CONF
+from .table import create
+from . import utils
 
 
 def raw_table(
@@ -16,13 +16,15 @@ def raw_table(
         locations: list[str],
         produce_method: Callable[[date,str],pa.Table],
     ) -> DeltaTable:
+    " Creates raw table with provided parameters. Erases existing table if any."
 
     print()
     print(f"## CONSTRUCTING RAW TABLE")
     print(f"# - with: {produce_method.__name__}")
 
-    _ = unlinked_table_path("raw")
-    raw_table = create_table("raw")
+
+    utils.unlink_path(RAW_TABLE_CONF.path)
+    raw_table = create(RAW_TABLE_CONF)
 
     days = (
         start_date + timedelta(days=i)
@@ -44,35 +46,3 @@ def raw_table(
     print(f"# - Generation time: {round(generation_time,2)}")
 
     return raw_table
-
-
-def compact_table(raw_table: DeltaTable, mode: DuplicationMode) -> DeltaTable:
-
-    print()
-    print(f"# CONSTRUCTING COMPACT TABLE ...")
-
-    compact_table = duplicate_table(raw_table,"compact", mode)
-    compact_table.optimize.compact()
-    compact_table.vacuum(
-        retention_hours=0,
-        enforce_retention_duration=False,
-        dry_run=False
-    )
-
-    return compact_table
-
-
-def zordered_table(raw_table: DeltaTable, mode: DuplicationMode):
-
-    print()
-    print(f"# CONSTRUCTING ZORDERED TABLE ... ")
-
-    zordered_table = duplicate_table(raw_table,"zordered", mode)
-    zordered_table.optimize.z_order(columns=["location","value"])
-    zordered_table.vacuum(
-        retention_hours=0,
-        enforce_retention_duration=False,
-        dry_run=False
-    )
-
-    return zordered_table

@@ -4,9 +4,9 @@ from typing import Any, Callable
 from deltalake import DeltaTable
 import duckdb
 import polars as pl
+import pyarrow as pa
 import timeit
 import xfp
-from .utils import timed
 
 
 @dataclass
@@ -39,10 +39,8 @@ def polars_lazy_query(table: DeltaTable) -> pl.DataFrame:
     return pl.scan_delta(table).pipe(_polars_base_query).collect()
 
 
-def duckdb_query(table: DeltaTable) -> pl.DataFrame:
 
-    with duckdb.connect() as con:
-        con.sql("SET temp_directory = 'tmp/duckdb_swap'")
+def duckdb_query(table: DeltaTable) -> pa.Table:
 
     return duckdb.sql(
         f"""
@@ -56,7 +54,7 @@ def duckdb_query(table: DeltaTable) -> pl.DataFrame:
         GROUP BY location, year_month
         ORDER BY location, year_month
         """
-    )
+    ).pl()
 
 @xfp.curry
 def query_stats(iter_nbr: int, query: Any,table: DeltaTable) -> float:

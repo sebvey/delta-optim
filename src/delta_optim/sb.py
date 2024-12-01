@@ -1,6 +1,11 @@
-from xfp import Xlist
+import pyspark
+from delta import configure_spark_with_delta_pip
 
-a,b,c = [1,2,3]
-d,e,f = Xlist([4,5,6])
+def get_local_session():
+    builder = (
+        pyspark.sql.SparkSession.builder.appName("MyApp")
+        .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
+        .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
+    )
 
-print(d,e,f)
+    return configure_spark_with_delta_pip(builder).getOrCreate()

@@ -1,64 +1,63 @@
-from enum import Enum, auto
 from pathlib import Path
 import shutil
 from deltalake import DeltaTable, write_deltalake
 
-from ..constant import BASE_PATH
-from ..domain import DuplicationMode, schema
+from ..constant import TableConf
+from ..domain import schema
+from . import utils
 
 
-def unlinked_table_path(table_name: str) -> Path:
+def get(table_conf: TableConf) -> DeltaTable:
 
-    table_path = BASE_PATH / table_name
+    if DeltaTable.is_deltatable(str(table_conf.path)):
+        return DeltaTable(table_conf.path)
 
-    if table_path.is_dir():
-        shutil.rmtree(table_path)
-
-    if table_path.is_file():
-        table_path.unlink()
-
-    return table_path
+    raise Exception(f"No delta table under {repr(table_conf.path)}")
 
 
-def get_table(table_name: str) -> DeltaTable:
+def create(table_conf: TableConf) -> DeltaTable:
+    "Creates an empty delta table. Removes existing one if any."
 
-    table_path = BASE_PATH / table_name
-    table = DeltaTable(table_path)
-
-    if DeltaTable.is_deltatable(table.table_uri):
-        return table
-
-    raise Exception(f"No delta table under {repr(table)}")
-
-
-def create_table(table_name: str) -> DeltaTable:
-
-    table_path = BASE_PATH / table_name
-    table_path.mkdir(parents=True)
-
+    utils.unlink_path(table_conf.path)
+    table_conf.path.mkdir(parents=True)
 
     return DeltaTable.create(
-        table_uri=str(table_path),
+        table_uri=str(table_conf.path),
         schema=schema,
-        name=table_name,
+        name=table_conf.name,
         mode="error",
         partition_by=["year_month"],
     )
 
 
-def duplicate_table(
-        src_table: DeltaTable,
-        dst_table_name: str,
-        mode: DuplicationMode
-    ) -> DeltaTable:
+def clone(src_table: DeltaTable, dst_folder: Path) -> DeltaTable:
+    "Clones a table by copying files. Erases existing destination folder if any"
 
-    if mode == DuplicationMode.CloneFolder:
-        table_path = unlinked_table_path(dst_table_name)
-        shutil.copytree(src=src_table.table_uri,dst=table_path)
-        return DeltaTable(table_path)
+    utils.unlink_path(dst_folder)
+    shutil.copytree(src=src_table.table_uri,dst=dst_folder)
+    return DeltaTable(dst_folder)
 
-    if mode == DuplicationMode.ReadWriteTable:
-        _ = unlinked_table_path(dst_table_name)
-        dst_table = create_table(dst_table_name)
-        write_deltalake(dst_table,src_table.to_pyarrow_dataset(), mode="append")
-        return dst_table
+
+
+# def unlinked_table_path(table_name: str) -> Path:
+
+#     table_path = BASE_PATH / table_name
+#     utils.unlink_path(table_path)
+#     return table_path
+
+# def duplicate(
+#         src_table: DeltaTable,
+#         dst_table_name: str,
+#         mode: DuplicationMode
+#     ) -> DeltaTable:
+
+#     if mode == DuplicationMode.CloneFolder:
+#         table_path = unlinked_table_path(dst_table_name)
+#         shutil.copytree(src=src_table.table_uri,dst=table_path)
+#         return DeltaTable(table_path)
+
+#     if mode == DuplicationMode.ReadWriteTable:
+#         _ = unlinked_table_path(dst_table_name)
+#         dst_table = create(dst_table_name)
+#         write_deltalake(dst_table,src_table.to_pyarrow_dataset(), mode="append")
+#         return dst_table

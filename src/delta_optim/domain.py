@@ -1,8 +1,5 @@
-from enum import Enum, auto
 from deltalake import Field, Schema
 from deltalake.schema import PrimitiveType
-
-from .constant import BASE_PATH
 
 
 schema = Schema([
@@ -11,7 +8,3 @@ schema = Schema([
     Field("location", PrimitiveType("string"),nullable=False), # TODO - should be cardinal instead
     Field("value",PrimitiveType("double"),nullable=False),
 ])
-
-class DuplicationMode(Enum):
-    CloneFolder = auto()
-    ReadWriteTable = auto()

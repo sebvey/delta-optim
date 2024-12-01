@@ -1,24 +1,18 @@
-from datetime import datetime
-import time
+import shutil
 import os
 from pathlib import Path
 
 from deltalake import DeltaTable
 
 
-def timed(func):
+def unlink_path(path: Path):
 
-    def wrapper(*args,**kwargs):
+    if path.is_dir():
+        shutil.rmtree(path)
 
-        iterations = 1
-        durations = []
-        for _ in range(iterations):
-            start_time = time.time()
-            result = func(*args, **kwargs)
-            durations.append((time.time() - start_time))
-        return (result, sum(durations)/iterations)
+    if path.is_file():
+        path.unlink()
 
-    return wrapper
 
 def get_folder_size(folder: Path) -> float:
     """Returns the size of a folder, in MB"""
