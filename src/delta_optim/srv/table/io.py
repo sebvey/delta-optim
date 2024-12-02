@@ -13,6 +13,3 @@ def get(spark, table_conf: TableConf) -> dlio.DeltaTable:
 
     raise Exception(f"No delta table under {repr(table_conf.path)}")
 
-
-def create(table_conf: TableConf) -> dlio.DeltaTable: ...
-

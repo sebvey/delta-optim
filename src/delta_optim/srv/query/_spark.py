@@ -1,3 +1,5 @@
+import polars as pl
+import pyarrow as pa
 import pyspark.sql.functions as spkf
 import pyspark.sql.types as spkt
 import pyspark.sql as sp
@@ -11,7 +13,7 @@ from .. import table
 def spark_query(spark,table_conf: TableConf) -> sp.DataFrame:
 
     delta_table = table.io.get(spark,table_conf)
-    return (
+    spark_df = (
         delta_table.toDF()
         .filter(spkf.col("value") > 0.2)
         .filter(spkf.col("location") == "Lyon")
@@ -28,3 +30,5 @@ def spark_query(spark,table_conf: TableConf) -> sp.DataFrame:
         )
         .sort("location","year_month")
     )
+    # for printing purpose
+    return pl.from_arrow(pa.Table.from_batches(spark_df._collect_as_arrow()))

@@ -1,11 +1,8 @@
-from xfp import Xlist
-
 from . import srv
 from .constant import (
     RAW_TABLE_CONF,
     COMPACT_DELTARS_CONF,
     COMPACT_DELTAIO_CONF,
-    COMPACT_RW_CONF,
 )
 from .srv.query import BenchmarkConf
 
@@ -27,12 +24,12 @@ def main():
         ]
     )
 
-    table_conf = [
+    queried_tables_conf = [
             RAW_TABLE_CONF,
-            COMPACT_RW_CONF,
             COMPACT_DELTAIO_CONF,
-            # COMPACT_DELTARS_CONF, #! bugged
-        ][2]
+            # COMPACT_DELTARS_CONF, #! polars fails on it
+        ]
 
-    for query in benchmark_conf.queries:
-        srv.query.query_stats(benchmark_conf.iter_nbr)(query)(table_conf)
+    for table_conf in queried_tables_conf:
+        for query in benchmark_conf.queries:
+            srv.query.query_stats(benchmark_conf.iter_nbr)(query)(table_conf)

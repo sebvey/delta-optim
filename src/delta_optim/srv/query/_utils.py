@@ -3,7 +3,7 @@ import timeit
 from typing import Any, Callable
 
 from deltalake import DeltaTable
-import xfp
+import toolz
 
 from ...constant import TableConf
 from .. import table
@@ -14,7 +14,7 @@ class BenchmarkConf:
         iter_nbr: int
         queries: list[Callable[[DeltaTable], Any]]
 
-@xfp.curry
+@toolz.curry
 def query_stats(iter_nbr: int, query: Any,table_conf: TableConf) -> float:
 
     duration = timeit.timeit(
@@ -28,7 +28,7 @@ def query_stats(iter_nbr: int, query: Any,table_conf: TableConf) -> float:
     print(f"# QUERY STATS:")
     print(f"# - Query        : {query.__name__}")
     print(f"# - Iterations   : {iter_nbr}")
-    print(f"# - Table        : {delta_table.metadata().name}")
+    print(f"# - Table        : {table_conf.name}")
     print(f"# => Duration (s): {round(duration,4)}")
     print(result)
 

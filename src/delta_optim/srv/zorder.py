@@ -1,3 +1,4 @@
+# OUTDATED CODE
 # from deltalake import DeltaTable
 
 # from ..domain import DuplicationMode

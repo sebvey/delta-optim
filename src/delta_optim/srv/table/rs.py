@@ -1,5 +1,3 @@
-from pathlib import Path
-import shutil
 from deltalake import DeltaTable
 
 from ...constant import TableConf

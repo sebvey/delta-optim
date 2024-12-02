@@ -6,6 +6,7 @@ from ..constant import (
     COMPACT_DELTAIO_CONF,
     COMPACT_DELTARS_CONF,
     COMPACT_RW_CONF,
+    RAW_TABLE_CONF,
     TableConf,
 )
 from . import table
@@ -17,7 +18,7 @@ def with_deltars(raw_table: DeltaTable) -> DeltaTable:
     print()
     print(f"# COMPACTING TO TABLE={COMPACT_DELTARS_CONF.name}")
 
-    new_table = table.rs.clone(raw_table, COMPACT_DELTARS_CONF.path)
+    new_table = table.clone(RAW_TABLE_CONF, COMPACT_DELTARS_CONF)
 
     new_table.optimize.compact()
     new_table.vacuum(
