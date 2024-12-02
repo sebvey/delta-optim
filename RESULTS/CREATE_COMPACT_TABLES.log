@@ -7,3 +7,7 @@
 # COMPACTING TO TABLE=compact_deltars
 # Number of parquet files: 1023
 # Total size of table: 2346.68
+
+# COMPACTING TO TABLE=compact_deltaio
+# Number of parquet files: 12
+# Total size of table: 1284.79

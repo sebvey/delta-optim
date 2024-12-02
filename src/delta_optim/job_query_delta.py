@@ -25,7 +25,7 @@ def main():
     )
 
     queried_tables_conf = [
-            RAW_TABLE_CONF,
+            # RAW_TABLE_CONF,
             COMPACT_DELTAIO_CONF,
             # COMPACT_DELTARS_CONF, #! polars fails on it
         ]

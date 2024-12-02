@@ -1,0 +1,101 @@
+# QUERY STATS:
+# - Query        : spark_query
+# - Iterations   : 1
+# - Table        : compact_deltars
+# => Duration (s): 16.3102
+shape: (12, 4)
+┌──────────┬────────────┬────────────┬─────────┐
+│ location ┆ year_month ┆ mean_value ┆ row_cnt │
+│ ---      ┆ ---        ┆ ---        ┆ ---     │
+│ str      ┆ str        ┆ f64        ┆ i64     │
+╞══════════╪════════════╪════════════╪═════════╡
+│ Lyon     ┆ 202401     ┆ 0.599939   ┆ 4284004 │
+│ Lyon     ┆ 202402     ┆ 0.59989    ┆ 4011036 │
+│ Lyon     ┆ 202403     ┆ 0.599754   ┆ 4287298 │
+│ Lyon     ┆ 202404     ┆ 0.599754   ┆ 4145790 │
+│ Lyon     ┆ 202405     ┆ 0.600247   ┆ 4285576 │
+│ …        ┆ …          ┆ …          ┆ …       │
+│ Lyon     ┆ 202408     ┆ 0.599813   ┆ 4284768 │
+│ Lyon     ┆ 202409     ┆ 0.60023    ┆ 4147006 │
+│ Lyon     ┆ 202410     ┆ 0.600177   ┆ 4283400 │
+│ Lyon     ┆ 202411     ┆ 0.600129   ┆ 4009579 │
+│ Lyon     ┆ 202412     ┆ 0.599962   ┆ 2141941 │
+└──────────┴────────────┴────────────┴─────────┘
+
+# QUERY STATS:
+# - Query        : duckdb_query
+# - Iterations   : 1
+# - Table        : compact_deltars
+# => Duration (s): 2.4776
+shape: (12, 4)
+┌──────────┬────────────┬────────────┬─────────┐
+│ location ┆ year_month ┆ mean_value ┆ row_cnt │
+│ ---      ┆ ---        ┆ ---        ┆ ---     │
+│ str      ┆ str        ┆ f64        ┆ i64     │
+╞══════════╪════════════╪════════════╪═════════╡
+│ Lyon     ┆ 202401     ┆ 0.599939   ┆ 4284004 │
+│ Lyon     ┆ 202402     ┆ 0.59989    ┆ 4011036 │
+│ Lyon     ┆ 202403     ┆ 0.599754   ┆ 4287298 │
+│ Lyon     ┆ 202404     ┆ 0.599754   ┆ 4145790 │
+│ Lyon     ┆ 202405     ┆ 0.600247   ┆ 4285576 │
+│ …        ┆ …          ┆ …          ┆ …       │
+│ Lyon     ┆ 202408     ┆ 0.599813   ┆ 4284768 │
+│ Lyon     ┆ 202409     ┆ 0.60023    ┆ 4147006 │
+│ Lyon     ┆ 202410     ┆ 0.600177   ┆ 4283400 │
+│ Lyon     ┆ 202411     ┆ 0.600129   ┆ 4009579 │
+│ Lyon     ┆ 202412     ┆ 0.599962   ┆ 2141941 │
+└──────────┴────────────┴────────────┴─────────┘
+
+# QUERY STATS:
+# - Query        : polars_eager_query
+# - Iterations   : 1
+# - Table        : compact_deltars
+# => Duration (s): 27.9822
+shape: (12, 4)
+┌──────────┬────────────┬────────────┬─────────┐
+│ location ┆ year_month ┆ mean_value ┆ len     │
+│ ---      ┆ ---        ┆ ---        ┆ ---     │
+│ str      ┆ str        ┆ f64        ┆ u32     │
+╞══════════╪════════════╪════════════╪═════════╡
+│ Lyon     ┆ 202401     ┆ 0.599939   ┆ 4284004 │
+│ Lyon     ┆ 202402     ┆ 0.59989    ┆ 4011036 │
+│ Lyon     ┆ 202403     ┆ 0.599754   ┆ 4287298 │
+│ Lyon     ┆ 202404     ┆ 0.599754   ┆ 4145790 │
+│ Lyon     ┆ 202405     ┆ 0.600247   ┆ 4285576 │
+│ …        ┆ …          ┆ …          ┆ …       │
+│ Lyon     ┆ 202408     ┆ 0.599813   ┆ 4284768 │
+│ Lyon     ┆ 202409     ┆ 0.60023    ┆ 4147006 │
+│ Lyon     ┆ 202410     ┆ 0.600177   ┆ 4283400 │
+│ Lyon     ┆ 202411     ┆ 0.600129   ┆ 4009579 │
+│ Lyon     ┆ 202412     ┆ 0.599962   ┆ 2141941 │
+└──────────┴────────────┴────────────┴─────────┘
+Traceback (most recent call last):
+  File "/.../delta-optim/.venv/bin/query-delta", line 8, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/.../delta-optim/src/delta_optim/job_query_delta.py", line 35, in main
+    srv.query.query_stats(benchmark_conf.iter_nbr)(query)(table_conf)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/.../delta-optim/.venv/lib/python3.13/site-packages/toolz/functoolz.py", line 304, in __call__
+    return self._partial(*args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/.../delta-optim/src/delta_optim/srv/query/_utils.py", line 20, in query_stats
+    duration = timeit.timeit(
+        lambda: query(table_conf),
+        number=iter_nbr)
+  File "/usr/local/Cellar/python@3.13/3.13.0_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/timeit.py", line 237, in timeit
+    return Timer(stmt, setup, timer, globals).timeit(number)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/usr/local/Cellar/python@3.13/3.13.0_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/timeit.py", line 180, in timeit
+    timing = self.inner(it, self.timer)
+  File "<timeit-src>", line 6, in inner
+  File "/.../delta-optim/src/delta_optim/srv/query/_utils.py", line 21, in <lambda>
+    lambda: query(table_conf),
+            ~~~~~^^^^^^^^^^^^
+  File "/.../delta-optim/src/delta_optim/srv/query/_polars.py", line 30, in polars_lazy_query
+    return pl.scan_delta(delta_table).pipe(_polars_base_query).collect()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/.../delta-optim/.venv/lib/python3.13/site-packages/polars/lazyframe/frame.py", line 2029, in collect
+    return wrap_df(ldf.collect(callback))
+                   ~~~~~~~~~~~^^^^^^^^^^
+polars.exceptions.ShapeError: unable to vstack, column names don't match: "value" and "location"
