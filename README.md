@@ -49,3 +49,6 @@ Tables among:
 - RAW_TABLE_CONF: the table initially produced, without compaction
 - COMPACT_DELTAIO_CONF: the table compacted by deltaio/delta using spark
 - COMPACT_DELTARS_CONF: the table compacted by deltaio/deltars
+
+
+(good link https://delta.io/blog/2023-02-27-deltalake-0.7.0-release/)

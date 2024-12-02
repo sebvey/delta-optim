@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 
 from deltalake import DeltaTable
+import polars as pl
 
 
 def unlink_path(path: Path):
@@ -26,5 +27,8 @@ def get_folder_size(folder: Path) -> float:
 
 
 def print_stats(table:DeltaTable):
-    print(f"# Number of parquet files: {len(table.files())}")
     print(f"# Total size of table: {get_folder_size(Path(table.table_uri))}")
+    print(f"# Number of listed files: {len(table.files())}")
+
+    cnt = len(pl.DataFrame(table.get_add_actions(flatten=True)))
+    print(f"# Active files number: {cnt}")

@@ -1,6 +1,4 @@
 from deltalake import DeltaTable, write_deltalake
-import polars as pl
-import toolz
 
 from ..constant import (
     COMPACT_DELTAIO_CONF,
@@ -10,9 +8,9 @@ from ..constant import (
     TableConf,
 )
 from . import table
+from . import utils
 
-#! deltars v0.22.2 - bug - list files + vaccum -> remove files are still there
-#! (listed in table and not vacuumed)
+#! deltars v0.22.2 - ? bug on active files ?
 def with_deltars(raw_table: DeltaTable) -> DeltaTable:
 
     print()
@@ -20,6 +18,7 @@ def with_deltars(raw_table: DeltaTable) -> DeltaTable:
 
     new_table = table.clone(RAW_TABLE_CONF, COMPACT_DELTARS_CONF)
 
+    # new_table.create_checkpoint() # no impact
     new_table.optimize.compact()
     new_table.vacuum(
         retention_hours=0,

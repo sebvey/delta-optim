@@ -11,13 +11,11 @@ dependencies = [
     "delta-spark>=3.2.1",
     "deltalake>=0.22.0",
     "duckdb>=1.1.3",
-    "marimo>=0.9.27",
     "numpy>=2.1.3",
     "polars>=1.15.0",
     "pyspark>=3.5.3",
     "timeit-decorator>=1.1.1",
     "toolz>=1.0.0",
-    "xfp>=1.0.0",
 ]
 
 [project.scripts]

@@ -13,7 +13,7 @@ def main():
     ]
 
     start_date=date(2024,1,1)
-    end_date=date(2025,1,1)
+    end_date=date(2024,4,1)
     locations = ("Lyon","Paris","Marseille")
 
     for producer in records_producers:

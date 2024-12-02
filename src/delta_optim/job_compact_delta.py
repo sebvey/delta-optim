@@ -1,5 +1,6 @@
-from .constant import RAW_TABLE_CONF
+import polars as pl
 
+from .constant import RAW_TABLE_CONF
 from . import srv
 
 
@@ -13,8 +14,14 @@ def main():
     print("# RAW TABLE STATS:")
     srv.utils.print_stats(raw_table)
 
-    compact_table = srv.compact.with_deltars(raw_table)
-    srv.utils.print_stats(compact_table)
+    compact_rs_table = srv.compact.with_deltars(raw_table)
+    srv.utils.print_stats(compact_rs_table)
 
-    compact_table = srv.compact.with_deltaio(spark,RAW_TABLE_CONF)
-    srv.utils.print_stats(compact_table)
+    (
+        pl.DataFrame(compact_rs_table.get_add_actions())
+        .select("path")
+        .write_ndjson("tmp_COMPACT_RS_get_add_actions.json")
+    )
+
+    compact_io_table = srv.compact.with_deltaio(spark,RAW_TABLE_CONF)
+    srv.utils.print_stats(compact_io_table)
