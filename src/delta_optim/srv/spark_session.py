@@ -12,8 +12,8 @@ def get_local_session(): # -> SparkSession:
             "spark.sql.catalog.spark_catalog",
             "org.apache.spark.sql.delta.catalog.DeltaCatalog"
         )
-        # .config("spark.executor.memory", "4G")
-        # .config("spark.driver.memory", "4G")
+        .config("spark.executor.memory", "4G")
+        .config("spark.driver.memory", "4G")
         .config("spark.sql.shuffle.partitions", "2")
         .config("spark.ui.enabled", "false")
         .config("spark.databricks.delta.retentionDurationCheck.enabled","false")

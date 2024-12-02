@@ -1,9 +1,9 @@
 ## CONSTRUCTING RAW TABLE
 # - with: from_polars_and_numpy
-# - Generation time: 149.74
+# - Generation time: 142.94
 # Number of parquet files: 1098
 # Total size of table: 1508.87
 
-# COMPACTING TO TABLE=compact_deltars_rw
-# Number of parquet files: 24
-# Total size of table: 1281.85
+# COMPACTING TO TABLE=compact_deltars
+# Number of parquet files: 1023
+# Total size of table: 2346.68

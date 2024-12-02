@@ -18,4 +18,3 @@ def main():
 
     compact_table = srv.compact.with_deltaio(spark,RAW_TABLE_CONF)
     srv.utils.print_stats(compact_table)
-
