@@ -64,7 +64,6 @@ def from_duckdb(day: date, location: str) -> pa.Table:
     """Produces a DataFrame with 86400 records for given day and location:
     - one 'query' per day -> ~30 files per month.
     - data partitioned by year_month
-    - WITH POLARS + PYARROW
     """
 
     query = f"""

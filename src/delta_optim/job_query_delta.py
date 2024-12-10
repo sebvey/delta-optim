@@ -1,8 +1,8 @@
 from . import srv
 from .constant import (
-    RAW_TABLE_CONF,
     COMPACT_DELTARS_CONF,
     COMPACT_DELTAIO_CONF,
+    RAW_TABLE_CONF,
 )
 from .srv.query import BenchmarkConf
 
@@ -25,9 +25,9 @@ def main():
     )
 
     queried_tables_conf = [
-            # RAW_TABLE_CONF,
+            RAW_TABLE_CONF,
             COMPACT_DELTAIO_CONF,
-            # COMPACT_DELTARS_CONF, #! polars fails on it
+            COMPACT_DELTARS_CONF,
         ]
 
     for table_conf in queried_tables_conf:

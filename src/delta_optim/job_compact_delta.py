@@ -14,7 +14,7 @@ def main():
     print("# RAW TABLE STATS:")
     srv.utils.print_stats(raw_table)
 
-    compact_rs_table = srv.compact.with_deltars(raw_table)
+    compact_rs_table = srv.compact.with_deltars()
     srv.utils.print_stats(compact_rs_table)
 
     (
@@ -23,5 +23,5 @@ def main():
         .write_ndjson("tmp_COMPACT_RS_get_add_actions.json")
     )
 
-    compact_io_table = srv.compact.with_deltaio(spark,RAW_TABLE_CONF)
+    compact_io_table = srv.compact.with_deltaio(spark)
     srv.utils.print_stats(compact_io_table)

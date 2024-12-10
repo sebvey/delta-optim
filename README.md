@@ -52,3 +52,11 @@ Tables among:
 
 
 (good link https://delta.io/blog/2023-02-27-deltalake-0.7.0-release/)
+
+# NB
+deltalake v0.22.2:
+-> bug in compaction (solved in v0.22.3)
+
+
+polars v0.16.0/deltalake v0.22.3:
+-> bug in lazy df when querying deltars compacted

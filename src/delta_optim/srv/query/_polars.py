@@ -25,6 +25,11 @@ def polars_eager_query(table_conf: TableConf) -> pl.DataFrame:
     return pl.read_delta(delta_table).pipe(_polars_base_query)
 
 
+# TODO - use_pyarrow = True -> less performant engine, but the polars one is buggy
+# TODO - https://github.com/pola-rs/polars/issues/20238
 def polars_lazy_query(table_conf: TableConf) -> pl.DataFrame:
     delta_table = table.rs.get(table_conf)
-    return pl.scan_delta(delta_table).pipe(_polars_base_query).collect()
+    return pl.scan_delta(
+        delta_table,
+        use_pyarrow=True,
+    ).pipe(_polars_base_query).collect()
